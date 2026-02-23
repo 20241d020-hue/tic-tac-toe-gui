@@ -39,11 +39,13 @@ class TicTacToe:
         if self.board[index] == "":
             color = "#89b4fa" if self.current_player == "X" else "#f38ba8"
             self.board[index] = self.current_player
+
             self.buttons[index].config(text=self.current_player, fg=color)
 
             winner = self.check_winner()
             if winner:
                 messagebox.showinfo("¡Fin del juego!", f"¡Jugador {winner} gana!")
+
                 self.status_label.config(text=f"¡{winner} ganó!")
                 self.disable_board()
             elif "" not in self.board:
@@ -59,6 +61,7 @@ class TicTacToe:
             [0, 1, 2], [3, 4, 5], [6, 7, 8],
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
+
         ]
         for combo in win_combos:
             a, b, c = combo
