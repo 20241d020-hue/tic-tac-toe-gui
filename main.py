@@ -11,6 +11,15 @@ class TicTacToe:
         self.buttons = []
         self._build_header()
         self._build_board()
+        self._build_reset_button()
+
+    def _build_header(self):
+        self.status_label = tk.Label(
+            self.root, text="Turno: Jugador X",
+            font=("Helvetica", 14, "bold"),
+            bg="#1e1e2e", fg="#cdd6f4"
+        )
+        self.status_label.pack(pady=10)
 
     def _build_header(self):
         self.status_label = tk.Label(
@@ -21,11 +30,13 @@ class TicTacToe:
         self.status_label.pack(pady=10)
 
     def _build_board(self):
-        frame = tk.Frame(self.root, bg="#1e1e2e")
-        frame.pack(padx=20, pady=10)
+
+        self.frame = tk.Frame(self.root, bg="#1e1e2e")
+        self.frame.pack(padx=20, pady=10)
         for i in range(9):
             btn = tk.Button(
-                frame, text="", width=5, height=2,
+                self.frame, text="", width=5, height=2,
+
                 font=("Helvetica", 24, "bold"),
                 bg="#313244", fg="#cdd6f4",
                 activebackground="#45475a",
@@ -35,16 +46,32 @@ class TicTacToe:
             btn.grid(row=i // 3, column=i % 3, padx=4, pady=4)
             self.buttons.append(btn)
 
+    def _build_reset_button(self):
+        reset_btn = tk.Button(
+            self.root, text="🔄 Reiniciar",
+            font=("Helvetica", 12, "bold"),
+            bg="#a6e3a1", fg="#1e1e2e",
+            relief="flat", padx=10, pady=6,
+            command=self.reset_game
+        )
+        reset_btn.pack(pady=12)
+
     def make_move(self, index):
         if self.board[index] == "":
             color = "#89b4fa" if self.current_player == "X" else "#f38ba8"
             self.board[index] = self.current_player
+
+
+
 
             self.buttons[index].config(text=self.current_player, fg=color)
 
             winner = self.check_winner()
             if winner:
                 messagebox.showinfo("¡Fin del juego!", f"¡Jugador {winner} gana!")
+
+
+
 
                 self.status_label.config(text=f"¡{winner} ganó!")
                 self.disable_board()
@@ -62,6 +89,9 @@ class TicTacToe:
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
 
+
+
+
         ]
         for combo in win_combos:
             a, b, c = combo
@@ -72,6 +102,15 @@ class TicTacToe:
     def disable_board(self):
         for btn in self.buttons:
             btn.config(state=tk.DISABLED)
+
+
+    def reset_game(self):
+        self.board = [""] * 9
+        self.current_player = "X"
+        self.status_label.config(text="Turno: Jugador X")
+        for btn in self.buttons:
+            btn.config(text="", state=tk.NORMAL, fg="#cdd6f4")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
